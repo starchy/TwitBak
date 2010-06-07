@@ -2,7 +2,7 @@ TwitBak is an open source (LGPL) backup client for Twitter built on Java. Downlo
 
 If your system doesn't know what to do with this file, you might not have the Java Runtime Environment (JRE) installed. You can download it here: http://www.java.com/en/download/manual.jsp
 
-As of the currently pre-preview release (0.1a), TwitBak backs up user data, statuses, direct messages, favorites, and mentions (aka @-replies). The output is stored as JSON in a plain text file.
+As of the current preview release (0.1a), TwitBak backs up user data, statuses, direct messages, favorites, and mentions (aka @-replies). The output is stored as JSON in a plain text file.
 
 Twitter has placed a temporary retrieval limit on statuses, so only the last 3,200 are available (see http://apiwiki.twitter.com/Things-Every-Developer-Should-Know ). When this limit is lifted, TwitBak will automatically adjust.
 
