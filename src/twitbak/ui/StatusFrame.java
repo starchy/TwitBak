@@ -49,6 +49,7 @@ public class StatusFrame extends JFrame implements ActionListener {
 	private static JButton cancelButton;
 	private static final JXBusyLabel busyLabel = new JXBusyLabel();
 	static final StatusBar statusBar = new StatusBar();
+	static int statusChangeFlag = 0;
 	
 	StatusFrame() {
 		super(TITLE);
@@ -81,6 +82,23 @@ public class StatusFrame extends JFrame implements ActionListener {
 		busyLabel.setBusy(true);
 		final BakWorker worker = new BakWorker(uname,pass,filename);
 		worker.execute();
+		
+		//FIXME - not actually resizing
+		if (!worker.isDone()) {
+			try {
+				if (statusChangeFlag == 1) {
+					statusChangeFlag = 0;
+					pack();
+				}
+				Thread.sleep(200);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else {
+			pack();
+		}
 		
 		cancelButton.addActionListener(new ActionListener() {
 
@@ -115,21 +133,46 @@ public class StatusFrame extends JFrame implements ActionListener {
 		try {
 				publish("Working...");
 				FullBackup fullBak = new FullBackup(uname,pass,filename);
-			} catch (TwitterException e) {
-				statusBar.setText(e.toString());
-				busyLabel.setBusy(false);
-				e.printStackTrace();
-				return (e.toString());
-			} catch (IOException e) {
-				statusBar.setText(e.toString());
-				busyLabel.setBusy(false);
-				e.printStackTrace();
-				return (e.toString());
-			} catch (InterruptedException e) {
-				statusBar.setText(e.toString());
-				busyLabel.setBusy(false);
-				e.printStackTrace();
-				return (e.toString());
+			} 
+		
+		catch (TwitterException e) {
+				if (e != null) {
+					String exception = e.toString();
+					
+					if (exception.contains("statusCode=-1")) {
+						exception = "Unable to contact Twitter. Check your network connection.";
+					}
+					else if (exception.contains("statusCode=401")) {
+						exception = "Authorization failed (bad username or password).";
+					}
+					else if (exception.contains("statusCode=502") || exception.contains("statusCode=503")) {
+						exception = "Fail Whale! Twitter is being lame; please try again shortly.";
+					}
+					
+					setStatus(exception);
+//					statusBar.setText(exception);
+					busyLabel.setBusy(false);
+					e.printStackTrace();
+					return (exception);
+				}
+			} 
+		
+		catch (IOException e) {
+				if (e != null) {
+					statusBar.setText(e.toString());
+					busyLabel.setBusy(false);
+					e.printStackTrace();
+					return (e.toString());
+				}
+			} 
+		
+		catch (InterruptedException e) {
+				if (e != null) {
+					statusBar.setText(e.toString());
+					busyLabel.setBusy(false);
+					e.printStackTrace();
+					return (e.toString());
+				}
 			} 
 			statusBar.setText("Done!");
 			busyLabel.setBusy(false);
@@ -144,7 +187,7 @@ public class StatusFrame extends JFrame implements ActionListener {
 		String getStatus () { return statusBar.getText(); }
 		
 		// Kinda lame having this public static, but it works for now
-		public static void setStatus (String str) {	statusBar.setText(str);	}
+		public static void setStatus (String str) {	statusBar.setText(str); statusChangeFlag = 1;}
 		
 	}
 	

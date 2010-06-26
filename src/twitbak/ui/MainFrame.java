@@ -20,6 +20,7 @@
 package twitbak.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,7 +55,6 @@ import javax.swing.text.JTextComponent;
  */
 public class MainFrame extends JFrame implements ActionListener {
 
-	private static final String WELCOME = "Welcome to TwitBak!";
 	private static final long serialVersionUID = 6395452504541189308L;
 	private static final String WARNING = "WARNING: Any existing file will be overwritten.";
 	private static final String SELECT = "Select";
@@ -78,7 +79,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	public MainFrame() {
 		
 		super(TITLE);
-		setSize(460, 220);	//FIXME
+		setSize(470, 200);	//FIXME
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setLayout(new BorderLayout());
@@ -92,7 +93,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		gc.gridx = 0;
 		panel.add(unameLabel, gc);
 
-		final JTextField unameField = new JTextField(20);
+		final JFormattedTextField unameField = new JFormattedTextField();
+		unameField.setColumns(15);
 		unameField.setActionCommand(BACKUP);		// If user hits ENTER on any text field, backup
 		unameField.addActionListener(this);
 		// Swing's threadsafe way of reading text input (argh)
@@ -216,6 +218,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		panel.add(fileButton, gc);
 		
 		JLabel warningLabel = new JLabel(WARNING);
+		warningLabel.setForeground(new Color(255, 0, 0));
 		gc.gridy = 3;
 		gc.gridx = 1;
 		panel.add(warningLabel, gc);
@@ -259,7 +262,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		
 		statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(statusLabel,BorderLayout.SOUTH);
-		statusLabel.setText(WELCOME);
 		
 		getRootPane().setDefaultButton(backupButton);
 	}

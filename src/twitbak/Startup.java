@@ -8,6 +8,7 @@ import twitbak.ui.MainFrame;
 import twitter4j.TwitterException;
 import twitter4j.internal.org.json.JSONException;
 
+//TODO - input validation
 //TODO - open file on completed backup
 //TODO - write what we got on exception (eg 502)
 //TODO - status window still getting initially setup, etc
@@ -22,6 +23,7 @@ import twitter4j.internal.org.json.JSONException;
 //TODO - organize DMs by sender
 //TODO - backup geolocation
 //TODO - retweets
+//TODO - accessibility
 
 /**
  * Entry point class for TwitBak.  Creates a new MainFrame on an
