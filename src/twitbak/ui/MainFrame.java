@@ -31,7 +31,6 @@ import java.util.HashMap;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -43,6 +42,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
@@ -93,12 +93,17 @@ public class MainFrame extends JFrame implements ActionListener {
 		gc.gridx = 0;
 		panel.add(unameLabel, gc);
 
-		final JFormattedTextField unameField = new JFormattedTextField();
-		unameField.setColumns(15);
-		unameField.setActionCommand(BACKUP);		// If user hits ENTER on any text field, backup
-		unameField.addActionListener(this);
+		final JTextField unameField = new JTextField(20);
+		
 		// Swing's threadsafe way of reading text input (argh)
 		unameDoc = unameField.getDocument();
+		
+		// Maximum username length: 15
+		((AbstractDocument) unameDoc).setDocumentFilter(new LengthFilter(15));
+		
+		// If user hits ENTER on any text field, backup
+		unameField.setActionCommand(BACKUP);		
+		unameField.addActionListener(this);
 		unameField.getDocument().addDocumentListener(new DocumentListener() {
 			
 			public void changedUpdate(DocumentEvent e) {
@@ -136,9 +141,14 @@ public class MainFrame extends JFrame implements ActionListener {
 		panel.add(passLabel, gc);
 
 		passField = new JPasswordField(20);
+		passDoc = passField.getDocument();
+		
+		// Maximum password length: 20
+		((AbstractDocument) passDoc).setDocumentFilter(new LengthFilter(20));
+
+		// If user hits ENTER on any text field, backup
 		passField.setActionCommand(BACKUP);
 		passField.addActionListener(this);
-		passDoc = passField.getDocument();
 		passField.getDocument().addDocumentListener(new DocumentListener() {
 					
 				public void changedUpdate(DocumentEvent e) {
