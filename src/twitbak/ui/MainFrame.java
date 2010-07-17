@@ -47,6 +47,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 
+import net.miginfocom.swing.MigLayout;
+
 /**
  * Main GUI class for TwitBak
  * 
@@ -74,24 +76,17 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JPasswordField passField;
 	private String uname, pass, filename;
 	private final Document unameDoc, passDoc, fileDoc;
-	private static JLabel statusLabel = new JLabel();
 
 	public MainFrame() {
 		
 		super(TITLE);
-		setSize(470, 200);	//FIXME
+//		setSize(500, 200);	//FIXME
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		setLayout(new BorderLayout());
-
-		JPanel panel = new JPanel(new GridBagLayout());
-		GridBagConstraints gc = new GridBagConstraints();
+		setLayout(new MigLayout());
 
 		JLabel unameLabel = new JLabel(USERNAME_LABEL);
-		gc.anchor = GridBagConstraints.WEST;
-		gc.gridy = 0;
-		gc.gridx = 0;
-		panel.add(unameLabel, gc);
+		add(unameLabel);
 
 		final JTextField unameField = new JTextField(20);
 		
@@ -131,14 +126,10 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 			
 		});
-		gc.gridy = 0;
-		gc.gridx = 1;
-		panel.add(unameField, gc);
+		add(unameField, "wrap");
 
 		JLabel passLabel = new JLabel(PASSWORD_LABEL);
-		gc.gridy = 1;
-		gc.gridx = 0;
-		panel.add(passLabel, gc);
+		add(passLabel);
 
 		passField = new JPasswordField(20);
 		passDoc = passField.getDocument();
@@ -176,16 +167,12 @@ public class MainFrame extends JFrame implements ActionListener {
 				}
 				
 			});
-		gc.gridy = 1;
-		gc.gridx = 1;
-		panel.add(passField, gc);
+		add(passField, "wrap");
 
 		JLabel fileLabel = new JLabel(BACKUP_FILE_LABEL);
-		gc.gridy = 2;
-		gc.gridx = 0;
-		panel.add(fileLabel, gc);
+		add(fileLabel);
 
-		final JTextField fileField = new JTextField(24);
+		final JTextField fileField = new JTextField(20);
 		fileField.setActionCommand(BACKUP);
 		fileField.addActionListener(this);
 		fileDoc = fileField.getDocument();
@@ -216,33 +203,21 @@ public class MainFrame extends JFrame implements ActionListener {
 				}
 				
 			});
-		gc.gridy = 2;
-		gc.gridx = 1;
-		panel.add(fileField, gc);
+		add(fileField, "growx");
 
 		JButton fileButton = new JButton(BROWSE_BUTTON);
 		fileButton.setActionCommand(BROWSE);
 		fileButton.addActionListener(this);
-		gc.gridy = 2;
-		gc.gridx = 2;
-		panel.add(fileButton, gc);
+		add(fileButton, "wrap");
 		
 		JLabel warningLabel = new JLabel(WARNING);
 		warningLabel.setForeground(new Color(255, 0, 0));
-		gc.gridy = 3;
-		gc.gridx = 1;
-		panel.add(warningLabel, gc);
+		add(warningLabel, "gap para, span 2");
 
 		JButton backupButton = new JButton(BACKUP_BUTTON); // FIXME - layout
 		backupButton.setActionCommand(BACKUP);
 		backupButton.addActionListener(this);
-		gc.gridy = 4;
-		gc.gridx = 1;
-		gc.anchor = GridBagConstraints.CENTER;
-		gc.fill = GridBagConstraints.BOTH;
-		gc.ipady = 10;
-		gc.insets = new Insets(10,0,0,0);
-		panel.add(backupButton, gc);
+		add(backupButton, "span 1 2, growx, growy");
 		
 		HashMap<Object, Action> jTextFieldPopupActionMap = createActionTable(unameField);
 		JPopupMenu jTextFieldPopupMenu = new JPopupMenu();
@@ -268,12 +243,9 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		UIManager.put("Button.defaultButtonFollowsFocus", Boolean.TRUE);
 
-		add(panel,BorderLayout.WEST);
-		
-		statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		add(statusLabel,BorderLayout.SOUTH);
-		
 		getRootPane().setDefaultButton(backupButton);
+		
+		pack();
 	}
 
 	private HashMap<Object, Action> createActionTable(

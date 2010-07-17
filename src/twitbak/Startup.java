@@ -8,7 +8,6 @@ import twitbak.ui.MainFrame;
 import twitter4j.TwitterException;
 import twitter4j.internal.org.json.JSONException;
 
-//TODO - input validation on filename field
 //TODO - open file on completed backup
 //TODO - write what we got on exception (eg 502)
 //TODO - status window still getting initially setup, etc
